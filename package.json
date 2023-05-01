@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "dev": "./node_modules/.bin/nodemon",
     "start": "node ./bin/www"
   },
   "dependencies": {
