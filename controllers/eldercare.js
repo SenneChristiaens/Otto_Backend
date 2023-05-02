@@ -43,6 +43,44 @@ const create = async (req, res) => {
   });
 };
 
+const login = async (req, res) => {
+  const body = req.body;
+  const eldercare = await Eldercare.findOne({ email: body.email });
+  if (eldercare) {
+    const validatePassword = await bcrypt.compare(
+      body.password,
+      eldercare.password
+    );
+
+    if (validatePassword) {
+      let token = jwt.sign(
+        {
+          uid: eldercare._id,
+          email: eldercare.email,
+        },
+        process.env.DB_SECRET
+      );
+
+      res.json({
+        status: "success",
+        token: token,
+        name: eldercare.name,
+      });
+    } else {
+      res.json({
+        status: "error",
+        message: "Wachtwoord is niet correct",
+      });
+    }
+  } else {
+    res.json({
+      status: "error",
+      message: "Gebruiker niet gevonden",
+    });
+  }
+};
+
 module.exports = {
   create,
+  login,
 };
