@@ -4,12 +4,11 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const dotenv = require("dotenv").config();
 
 mongoose.set('strictQuery', false);
 
-mongoose.connect(
-  "mongodb+srv://Admin:V503QLZhuW7EHNtK@otto.o9tu3np.mongodb.net?retryWrites=true&w=majority"
-);
+mongoose.connect(process.env.DB_CONNECTION);
 
 // const adminsRouter = require("./routes/admins");
 
