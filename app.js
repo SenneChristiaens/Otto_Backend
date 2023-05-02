@@ -11,6 +11,7 @@ mongoose.set('strictQuery', false);
 mongoose.connect(process.env.DB_CONNECTION);
 
 // const adminsRouter = require("./routes/admins");
+const eldercareRouter = require("./routes/eldercare");
 
 const app = express();
 
