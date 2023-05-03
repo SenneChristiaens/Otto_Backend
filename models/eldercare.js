@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Resident = require("./resident");
 const Schema = mongoose.Schema;
 
 const eldercareSchema = new Schema({
@@ -8,6 +9,7 @@ const eldercareSchema = new Schema({
   password: String,
   address: String,
   phone: String,
+  residents: [{type: Object, ref: Resident}]
 });
 
 const Eldercare = mongoose.model("Eldercare", eldercareSchema);
