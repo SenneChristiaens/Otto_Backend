@@ -67,7 +67,7 @@ const login = async (req, res) => {
       res.json({
         status: "success",
         token: token,
-        name: driver.givenName + " " + driver.lastName,
+        name: driver.givenName + " " + driver.familyName,
       });
     } else {
       res.json({
