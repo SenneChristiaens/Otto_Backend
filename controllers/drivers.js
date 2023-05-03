@@ -32,7 +32,7 @@ const create = async (req, res) => {
     let token = jwt.sign(
       {
         uid: driver._id,
-        name: driver.givenName + " " + driver.lastName,
+        name: driver.givenName + " " + driver.familyName,
       },
       secret
     );
