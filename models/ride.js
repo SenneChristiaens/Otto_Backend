@@ -9,7 +9,7 @@ const rideSchema = new Schema({
   endlat: String,
   endlng: String,
   driver: { type: Object, ref: Driver},
-  residents: [{type: Object}],
+  residents: [{ type: Object, ref: Resident}],
   timeStamp: Date
 
 });
