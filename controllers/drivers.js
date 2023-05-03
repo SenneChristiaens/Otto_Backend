@@ -14,10 +14,28 @@ const create = async (req, res) => {
   driver.email = req.body.email;
   driver.phone = req.body.phone;
 
+  //check if password is empty
   if (driver.password == "") {
     return res.json({
       status: "error",
       message: "Password can't be empty",
+    });
+  }
+
+  //check if password check is the same
+  if (driver.password != req.body.passwordCheck) {
+    return res.json({
+      status: "error",
+      message: "Passwords don't match",
+    });
+  }
+
+    //check if user is 18y or older
+  let birthDate = new Date(driver.dateOfBirth);
+  if ((Date.now() - birthDate) / 31556952000 < 18) {
+    return res.json({
+      status: "error",
+      message: "User must me 18years or over",
     });
   }
 
