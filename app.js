@@ -12,6 +12,7 @@ mongoose.set('strictQuery', false);
 mongoose.connect(process.env.DB_CONNECTION);
 
 const eldercareRouter = require("./routes/eldercare");
+const driverRouter = require("./routes/driver");
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use(
 
 
 app.use("/api/eldercare", eldercareRouter);
+app.use("/api/driver", driverRouter);
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
