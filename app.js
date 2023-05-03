@@ -12,7 +12,9 @@ mongoose.set('strictQuery', false);
 mongoose.connect(process.env.DB_CONNECTION);
 
 const eldercareRouter = require("./routes/eldercare");
+const residentRouter = require("./routes/resident");
 const driverRouter = require("./routes/driver");
+const rideRouter = require("./routes/ride");
 
 const app = express();
 
@@ -34,7 +36,9 @@ app.use(
 
 
 app.use("/api/eldercare", eldercareRouter);
+app.use("/api/resident", residentRouter);
 app.use("/api/driver", driverRouter);
+app.use("/api/ride", rideRouter);
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
