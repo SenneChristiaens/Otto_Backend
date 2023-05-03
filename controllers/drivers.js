@@ -9,7 +9,7 @@ const create = async (req, res) => {
   driver.familyName = req.body.familyName;
   driver.dateOfBirth = req.body.dateOfBirth;
   driver.gender = req.body.gender;
-  driver.adress = req.body.address;
+  driver.address = req.body.address;
   driver.password = req.body.password;
   driver.email = req.body.email;
   driver.phone = req.body.phone;
