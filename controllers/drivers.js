@@ -45,7 +45,7 @@ const create = async (req, res) => {
   //set user password to hashed password
   driver.password = await bcrypt.hash(driver.password, salt);
 
-  // save eldercare home to database
+  // save user to database
   driver.save().then(result => {
     let token = jwt.sign(
       {
@@ -54,7 +54,6 @@ const create = async (req, res) => {
       },
       secret
     );
-
     res.json({
       status: "success",
       data: {
