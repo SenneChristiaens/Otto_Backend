@@ -13,6 +13,10 @@ const create = async (req, res) => {
   driver.password = req.body.password;
   driver.email = req.body.email;
   driver.phone = req.body.phone;
+  driver.carBrand = req.body.carBrand;
+  driver.carModel = req.body.carModel;
+  driver.carSeats = req.body.carSeats;
+  driver.carColor = req.body.carColor;
 
   //check if password is empty
   if (driver.password == "") {

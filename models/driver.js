@@ -11,6 +11,10 @@ const driverSchema = new Schema({
   password: String,
   email: String,
   phoneNumber: String,
+  carBrand: String,
+  carModel: String,
+  carSeats: Number,
+  carColor: String
 });
 
 const Driver = mongoose.model("Driver", driverSchema);
