@@ -103,7 +103,6 @@ const login = async (req, res) => {
 const isAuth = async (req, res) => {
   try {
     const decoded = jwt.verify(req.body.token, process.env.DB_SECRET);
-    console.log(decoded);
     const id = decoded.uid;
     const email = decoded.email;
     const d = await Driver.findOne({ email: email });
@@ -124,6 +123,34 @@ const isAuth = async (req, res) => {
       message: "Invalid token"
     });
   }
+}
+
+const getInfo = async (req, res) => {
+  try {
+    const decoded = jwt.verify(req.body.token, process.env.DB_SECRET);
+    if(Driver.exists({_id: decoded.uid})) {
+      const d = await Driver.findOne({ _id: decoded.uid });
+      res.json({
+        status: "success",
+        name: d.givenName + " " + d.familyName,
+        email: d.email,
+        gender: d.gender,
+        dateOfBirth: d.dateOfBirth,
+        address: d.address,
+        profilePicture: d.profilePicture,
+      });
+    } else {
+      res.json({
+        status: "error",
+        message: "Driver not found"
+      });
+    }
+  } catch (error) {
+    res.json({
+      status: "error",
+      message: "Invalid token"
+    });
+  }
 
 }
 
@@ -131,4 +158,5 @@ module.exports = {
   create,
   login,
   isAuth,
+  getInfo
 };
