@@ -100,7 +100,35 @@ const login = async (req, res) => {
   }
 };
 
+const isAuth = async (req, res) => {
+  try {
+    const decoded = jwt.verify(req.body.token, process.env.DB_SECRET);
+    console.log(decoded);
+    const id = decoded.uid;
+    const email = decoded.email;
+    const d = await Driver.findOne({ email: email });
+    if(d._id == id) {
+      res.json({
+        status: "success",
+        message: "Driver is authorized"
+      });
+    } else {
+      res.json({
+        status: "error",
+        message: "Driver is not authorized"
+      });
+    }
+  } catch (error) {
+    res.json({
+      status: "error",
+      message: "Invalid token"
+    });
+  }
+
+}
+
 module.exports = {
   create,
   login,
+  isAuth,
 };
