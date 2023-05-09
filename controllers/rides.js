@@ -1,6 +1,6 @@
-const Ride = require("../models/ride");
-const Driver = require("../models/driver");
-const Resident = require("../models/resident");
+const Ride = require("../models/ride.js");
+const Driver = require("../models/driver.js");
+const Resident = require("../models/resident.js");
 
 const jwt = require("jsonwebtoken");
 const secret = process.env.DB_SECRET;
