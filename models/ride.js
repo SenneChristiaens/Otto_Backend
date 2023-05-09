@@ -4,8 +4,7 @@ const Resident = require("./resident");
 const Schema = mongoose.Schema;
 
 const rideSchema = new Schema({
-  startlat: String,
-  startlng: String,
+  origin: String,
   destination: String,
   driver: { type: Object, ref: Driver},
   residents: [{ type: Object, ref: Resident}],

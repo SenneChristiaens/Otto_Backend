@@ -7,9 +7,8 @@ const secret = process.env.DB_SECRET;
 
 const create = async (req, res) => {
     let ride = new Ride();
-    ride.startlat = req.body.startlat;
-    ride.startlng = req.body.startlng;
     ride.destination = req.body.destination;
+    ride.origin = req.body.origin;
     ride.driver = await Driver.findOne({ _id: req.body.driver });
     ride.timeStamp = new Date(req.body.timeStamp);
     
