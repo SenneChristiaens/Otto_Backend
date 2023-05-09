@@ -8,7 +8,8 @@ const create = async (req, res) => {
     let availability = new Availability();
     availability.beginDate = new Date(req.body.beginDate);
     availability.endDate = new Date(req.body.endDate);
-    availability.driver = await Driver.findOne({ _id: req.body.driver });
+    const decoded = jwt.verify(req.headers.authorization.split(' ')[1], process.env.DB_SECRET);
+    availability.driver = await Driver.findOne({ _id: decoded.uid });
     
     // save eldercare home to database
     availability.save().then(result => {
