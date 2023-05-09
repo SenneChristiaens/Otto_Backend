@@ -106,7 +106,7 @@ const login = async (req, res) => {
 
 const isAuth = async (req, res) => {
   try {
-    const decoded = jwt.verify(req.body.token, process.env.DB_SECRET);
+    const decoded = jwt.verify(req.headers.authorization.split(' ')[1], process.env.DB_SECRET);
     const id = decoded.uid;
     const email = decoded.email;
     const d = await Driver.findOne({ email: email });
@@ -131,7 +131,7 @@ const isAuth = async (req, res) => {
 
 const getInfo = async (req, res) => {
   try {
-    const decoded = jwt.verify(req.body.token, process.env.DB_SECRET);
+    const decoded = jwt.verify(req.headers.authorization.split(' ')[1], process.env.DB_SECRET);
     if(Driver.exists({_id: decoded.uid})) {
       const d = await Driver.findOne({ _id: decoded.uid });
       res.json({

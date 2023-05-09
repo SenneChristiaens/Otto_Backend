@@ -80,7 +80,33 @@ const login = async (req, res) => {
   }
 };
 
+const isAuth = async (req, res) => {
+  try {
+    const decoded = jwt.verify(req.headers.authorization.split(" ")[1], process.env.DB_SECRET);
+    const id = decoded.uid;
+    const email = decoded.email;
+    const e = await Eldercare.findOne({ email: email });
+    if(e._id == id) {
+      res.json({
+        status: "success",
+        message: "Eldercare is authorized"
+      });
+    } else {
+      res.json({
+        status: "error",
+        message: "Eldercare is not authorized"
+      });
+    }
+  } catch (error) {
+    res.json({
+      status: "error",
+      message: "Invalid token"
+    });
+  }
+}
+
 module.exports = {
   create,
   login,
+  isAuth,
 };
