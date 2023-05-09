@@ -54,8 +54,26 @@ const create = async (req, res) => {
   
   }
 
+  const getById = async (req, res) => {
+    try {
+        const r = await Ride.find({ _id: req.body.id });
+        res.json({
+          status: "success",
+          ride: r,
+        });
+
+    } catch (error) {
+      res.json({
+        status: "error",
+        message: "Invalid ride id",
+      });
+    }
+  
+  }
+
   module.exports = {
     create,
     getRidesByDriver,
+    getById,
   };
   
