@@ -6,12 +6,10 @@ const Schema = mongoose.Schema;
 const rideSchema = new Schema({
   startlat: String,
   startlng: String,
-  endlat: String,
-  endlng: String,
+  destination: String,
   driver: { type: Object, ref: Driver},
   residents: [{ type: Object, ref: Resident}],
   timeStamp: Date
-
 });
 
 const Ride = mongoose.model("Ride", rideSchema);

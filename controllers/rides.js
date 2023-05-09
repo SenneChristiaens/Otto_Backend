@@ -9,8 +9,7 @@ const create = async (req, res) => {
     let ride = new Ride();
     ride.startlat = req.body.startlat;
     ride.startlng = req.body.startlng;
-    ride.endlat = req.body.endlat;
-    ride.endlng = req.body.endlng;
+    ride.destination = req.body.destination;
     ride.driver = await Driver.findOne({ _id: req.body.driver });
     ride.timeStamp = new Date(req.body.timeStamp);
     
