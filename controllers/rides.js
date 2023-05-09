@@ -38,7 +38,7 @@ const create = async (req, res) => {
         const r = await Ride.find({ driver: d });
         res.json({
           status: "success",
-          drives: r,
+          rides: r,
         });
       } else {
         res.json({
