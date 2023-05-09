@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Driver = require("./driver");
+const Driver = require("./driver.js");
 const Schema = mongoose.Schema;
 
 const availabilitySchema = new Schema({
