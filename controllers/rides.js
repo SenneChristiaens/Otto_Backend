@@ -2,6 +2,9 @@ const Ride = require("../models/ride");
 const Driver = require("../models/driver");
 const Resident = require("../models/resident");
 
+const jwt = require("jsonwebtoken");
+const secret = process.env.DB_SECRET;
+
 const create = async (req, res) => {
     let ride = new Ride();
     ride.startlat = req.body.startlat;
@@ -27,7 +30,33 @@ const create = async (req, res) => {
     });
   };
 
+  const getRidesByDriver = async (req, res) => {
+    try {
+      const decoded = jwt.verify(req.body.token, process.env.DB_SECRET);
+      if(Driver.exists({_id: decoded.uid})) {
+        const d = await Driver.findOne({_id:decoded.uid});
+        const r = await Ride.find({ driver: d });
+        res.json({
+          status: "success",
+          drives: r,
+        });
+      } else {
+        res.json({
+          status: "error",
+          message: "Driver not found"
+        });
+      }
+    } catch (error) {
+      res.json({
+        status: "error",
+        message: "Invalid token",
+      });
+    }
+  
+  }
+
   module.exports = {
     create,
+    getRidesByDriver,
   };
   
