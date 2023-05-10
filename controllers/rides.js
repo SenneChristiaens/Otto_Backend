@@ -9,7 +9,8 @@ const create = async (req, res) => {
     let ride = new Ride();
     ride.destination = req.body.destination;
     ride.origin = req.body.origin;
-    ride.driver = await Driver.findOne({ _id: req.body.driver });
+    // ride.driver = await Driver.findOne({ _id: req.body.driver });
+    ride.driver = null;
     ride.timeStamp = new Date(req.body.timeStamp);
     
     //get all residents from id and push to array
@@ -30,7 +31,7 @@ const create = async (req, res) => {
 
   const getRidesByDriver = async (req, res) => {
     try {
-      const decoded = jwt.verify(req.headers.authorization.split(' ')[1], process.env.DB_SECRET);
+      const decoded = jwt.verify(req.headers.authorization.split(' ')[1], secret);
       if(Driver.exists({_id: decoded.uid})) {
         const d = await Driver.findOne({_id:decoded.uid});
         const r = await Ride.find({ driver: d });
@@ -51,7 +52,49 @@ const create = async (req, res) => {
       });
     }
   
-  }
+  };
+
+  const getAvailableRides = async (req, res) => {
+    try {
+        const r = await Ride.find({ driver: null });
+        res.json({
+          status: "success",
+          rides: r,
+        });
+    } catch (error) {
+      res.json({
+        status: "error",
+        message: "Invalid token: " + req.headers.authorization.split(' ')[1],
+      });
+    }
+  
+  };
+
+  const accept = async (req, res) => {
+    console.log(jwt.verify(req.headers.authorization.split(' ')[1], secret));
+    try {
+      decoded = jwt.verify(req.headers.authorization.split(' ')[1], secret);
+      const d = await Driver.findOne({ _id: decoded.uid });
+      if(Driver.exists({_id: decoded.uid})) {
+        const r = await Ride.findOneAndUpdate({ _id: req.body.id },{ driver: d });
+        res.json({
+          status: "success",
+          message: "Ride accepted"
+        });
+      } else {
+        res.json({
+          status: "error",
+          message: "Driver not found"
+        });
+      }
+    } catch (error) {
+      res.json({
+        status: "error",
+        message: "Invalid token",
+      });
+    }
+  
+  };
 
   const getById = async (req, res) => {
     try {
@@ -68,11 +111,13 @@ const create = async (req, res) => {
       });
     }
   
-  }
+  };
 
   module.exports = {
     create,
     getRidesByDriver,
     getById,
+    getAvailableRides,
+    accept,
   };
   
