@@ -105,8 +105,33 @@ const isAuth = async (req, res) => {
   }
 }
 
+const getResidents = async (req, res) => {
+  console.log(jwt.verify(req.headers.authorization.split(' ')[1], process.env.DB_SECRET));
+  try {
+    const decoded = jwt.verify(req.headers.authorization.split(' ')[1], process.env.DB_SECRET);
+    if(Eldercare.exists({_id: decoded.uid})) {
+      const e = await Eldercare.find({ _id: decoded.uid });
+      res.json({
+        residents: e.residents
+      });
+    } else {
+      res.json({
+        status: "error",
+        message: "Eldercare not found"
+      });
+    }
+  } catch (error) {
+    res.json({
+      status: "error",
+      message: "Invalid token"
+    });
+  }
+
+}
+
 module.exports = {
   create,
   login,
   isAuth,
+  getResidents,
 };
