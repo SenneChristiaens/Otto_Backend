@@ -71,9 +71,9 @@ const create = async (req, res) => {
   };
 
   const accept = async (req, res) => {
-    console.log(jwt.verify(req.headers.authorization.split(' ')[1], secret));
+
     try {
-      decoded = jwt.verify(req.headers.authorization.split(' ')[1], secret);
+      const decoded = jwt.verify(req.headers.authorization.split(' ')[1], process.env.DB_SECRET);
       const d = await Driver.findOne({ _id: decoded.uid });
       if(Driver.exists({_id: decoded.uid})) {
         const r = await Ride.findOneAndUpdate({ _id: req.body.id },{ driver: d });
