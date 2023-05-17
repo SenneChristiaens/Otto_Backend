@@ -1,4 +1,5 @@
 const Eldercare = require("../models/eldercare");
+const Resident = require("../models/resident");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const secret = process.env.DB_SECRET;
@@ -106,13 +107,12 @@ const isAuth = async (req, res) => {
 }
 
 const getResidents = async (req, res) => {
-  console.log(jwt.verify(req.headers.authorization.split(' ')[1], process.env.DB_SECRET));
   try {
     const decoded = jwt.verify(req.headers.authorization.split(' ')[1], process.env.DB_SECRET);
     if(Eldercare.exists({_id: decoded.uid})) {
-      const e = await Eldercare.find({ _id: decoded.uid });
+      const e = await Resident.find({ eldercare: decoded.uid })
       res.json({
-        residents: e.residents
+        residents: e
       });
     } else {
       res.json({
