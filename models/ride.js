@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 const rideSchema = new Schema({
   origin: String,
-  destination: String,
+  destination: [Number],
   driver: { type: Object, ref: Driver},
   residents: [{ type: Object, ref: Resident}],
   timeStamp: Date

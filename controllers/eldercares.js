@@ -1,4 +1,4 @@
-const Eldercare = require("../models/eldercare");
+const Eldercare = require("../models/eldercare.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const secret = process.env.DB_SECRET;
@@ -25,7 +25,7 @@ const create = async (req, res) => {
   eldercare.password = await bcrypt.hash(eldercare.password, salt);
 
   // save eldercare home to database
-  eldercare.save().then(result => {
+  eldercare.save().then((result) => {
     let token = jwt.sign(
       {
         uid: eldercare._id,
@@ -58,7 +58,7 @@ const login = async (req, res) => {
           uid: eldercare._id,
           email: eldercare.email,
         },
-        process.env.DB_SECRET
+        secret
       );
 
       res.json({
@@ -82,52 +82,51 @@ const login = async (req, res) => {
 
 const isAuth = async (req, res) => {
   try {
-    const decoded = jwt.verify(req.headers.authorization.split(" ")[1], process.env.DB_SECRET);
+    const decoded = jwt.verify(req.headers.authorization.split(" ")[1], secret);
     const id = decoded.uid;
     const email = decoded.email;
     const e = await Eldercare.findOne({ email: email });
-    if(e._id == id) {
+    if (e._id == id) {
       res.json({
         status: "success",
-        message: "Eldercare is authorized"
+        message: "Eldercare is authorized",
       });
     } else {
       res.json({
         status: "error",
-        message: "Eldercare is not authorized"
+        message: "Eldercare is not authorized",
       });
     }
   } catch (error) {
     res.json({
       status: "error",
-      message: "Invalid token"
+      message: "Invalid token",
     });
   }
-}
+};
 
 const getResidents = async (req, res) => {
-  console.log(jwt.verify(req.headers.authorization.split(' ')[1], process.env.DB_SECRET));
   try {
-    const decoded = jwt.verify(req.headers.authorization.split(' ')[1], process.env.DB_SECRET);
-    if(Eldercare.exists({_id: decoded.uid})) {
+    const decoded = jwt.verify(req.headers.authorization.split(" ")[1], secret);
+    if (Eldercare.exists({ _id: decoded.uid })) {
       const e = await Eldercare.find({ _id: decoded.uid });
       res.json({
-        residents: e.residents
+        status: "success",
+        residents: e.residents,
       });
     } else {
       res.json({
         status: "error",
-        message: "Eldercare not found"
+        message: "Eldercare not found",
       });
     }
   } catch (error) {
     res.json({
       status: "error",
-      message: "Invalid token"
+      message: "Invalid token",
     });
   }
-
-}
+};
 
 module.exports = {
   create,
