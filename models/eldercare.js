@@ -9,7 +9,6 @@ const eldercareSchema = new Schema({
   password: String,
   address: String,
   phone: String,
-  residents: [{type: Object, ref: Resident}]
 });
 
 const Eldercare = mongoose.model("Eldercare", eldercareSchema);

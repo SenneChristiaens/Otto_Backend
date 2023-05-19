@@ -7,7 +7,7 @@ const residentSchema = new Schema({
   roomNumber: String,
   emergencyContact: String,
   needs: [String],
-  profilePicture: String
+  eldercare: String,
 });
 
 const Resident = mongoose.model("residents", residentSchema);

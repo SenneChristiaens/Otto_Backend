@@ -7,7 +7,7 @@ const create = async (req, res) => {
     resident.roomNumber = req.body.roomNumber;
     resident.emergencyContact = req.body.emergencyContact;
     resident.needs = req.body.needs;
-    resident.profilePicture = req.body.profilePicture;
+    resident.eldercare = req.body.eldercare;
   
     // save eldercare home to database
     resident.save().then(result => {
