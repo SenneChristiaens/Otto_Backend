@@ -65,6 +65,7 @@ const login = async (req, res) => {
         status: "success",
         token: token,
         name: eldercare.name,
+        id: eldercare._id,
       });
     } else {
       res.json({
