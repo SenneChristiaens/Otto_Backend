@@ -11,6 +11,7 @@ const create = async (req, res) => {
   eldercare.password = req.body.password;
   eldercare.address = req.body.address;
   eldercare.phone = req.body.phone;
+  eldercare.riziv = req.body.riziv;
 
   if (eldercare.password == "") {
     return res.json({
