@@ -3,13 +3,11 @@ const Driver = require("../models/driver.js");
 const Resident = require("../models/resident.js");
 
 const jwt = require("jsonwebtoken");
-const secret = process.env.DB_SECRET;
 
 const create = async (req, res) => {
     let ride = new Ride();
-    ride.destination = req.body.destination;
-    ride.origin = req.body.origin;
-    // ride.driver = await Driver.findOne({ _id: req.body.driver });
+    ride.origin = [req.body.origin.lat, req.body.origin.lng];
+    ride.destination = [req.body.destination.lat, req.body.destination.lng];
     ride.driver = null;
     ride.timeStamp = new Date(req.body.timeStamp);
     
@@ -31,10 +29,9 @@ const create = async (req, res) => {
 
   const getRidesByDriver = async (req, res) => {
     try {
-      const decoded = jwt.verify(req.headers.authorization.split(' ')[1], secret);
-      if(Driver.exists({_id: decoded.uid})) {
-        const d = await Driver.findOne({_id:decoded.uid});
-        const r = await Ride.find({ driver: d });
+      if(Driver.exists({_id: req.data.uid})) {
+        // const d = await Driver.findOne({_id: req.data.uid});
+        const r = await Ride.find({ driver: await Driver.findOne({_id: req.data.uid}) });
         res.json({
           status: "success",
           rides: r,
@@ -55,28 +52,18 @@ const create = async (req, res) => {
   };
 
   const getAvailableRides = async (req, res) => {
-    try {
-        const r = await Ride.find({ driver: null });
-        res.json({
-          status: "success",
-          rides: r,
-        });
-    } catch (error) {
-      res.json({
-        status: "error",
-        message: "Invalid token: " + req.headers.authorization.split(' ')[1],
-      });
-    }
-  
+    const r = await Ride.find({ driver: null });
+    res.json({
+        status: "success",
+        rides: r,
+    });
+    
   };
 
   const accept = async (req, res) => {
-
-    try {
-      const decoded = jwt.verify(req.headers.authorization.split(' ')[1], process.env.DB_SECRET);
-      const d = await Driver.findOne({ _id: decoded.uid });
-      if(Driver.exists({_id: decoded.uid})) {
-        const r = await Ride.findOneAndUpdate({ _id: req.body.id },{ driver: d });
+    //   const d = await Driver.findOne({ _id: req.data.uid });
+      if(Driver.exists({_id: req.data.uid})) {
+        const r = await Ride.findOneAndUpdate({ _id: req.body.id },{ driver: await Driver.findOne({ _id: req.data.uid }) });
         res.json({
           status: "success",
           message: "Ride accepted"
@@ -87,13 +74,6 @@ const create = async (req, res) => {
           message: "Driver not found"
         });
       }
-    } catch (error) {
-      res.json({
-        status: "error",
-        message: "Invalid token",
-      });
-    }
-  
   };
 
   const getById = async (req, res) => {

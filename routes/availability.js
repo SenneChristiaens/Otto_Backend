@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const availabilitiesController = require("../controllers/availabilities");
+const availabilitiesController = require("../controllers/availabilities.js");
+const jwt = require('../middleware/jwt.js');
 
-router.post("/create", availabilitiesController.create);
-router.post("/getbydriver", availabilitiesController.getAvailabilitiesByDriver);
+router.post("/create", jwt.authenticateToken, availabilitiesController.create);
+router.post("/getbydriver", jwt.authenticateToken, availabilitiesController.getAvailabilitiesByDriver);
 router.post("/getById", availabilitiesController.getById);
 
 module.exports = router;

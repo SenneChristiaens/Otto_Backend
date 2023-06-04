@@ -1,15 +1,12 @@
 const Availability = require("../models/availability.js");
 const Driver = require("../models/driver.js");
-
 const jwt = require("jsonwebtoken");
-const secret = process.env.DB_SECRET;
 
 const create = async (req, res) => {
     let availability = new Availability();
     availability.beginDate = new Date(req.body.beginDate);
     availability.endDate = new Date(req.body.endDate);
-    const decoded = jwt.verify(req.headers.authorization.split(' ')[1], process.env.DB_SECRET);
-    availability.driver = await Driver.findOne({ _id: decoded.uid });
+    availability.driver = await Driver.findOne({ _id: req.data.uid });
     
     // save eldercare home to database
     availability.save().then(result => {
@@ -23,10 +20,8 @@ const create = async (req, res) => {
   };
 
   const getAvailabilitiesByDriver = async (req, res) => {
-    try {
-      const decoded = jwt.verify(req.headers.authorization.split(' ')[1], process.env.DB_SECRET);
-      if(Driver.exists({_id: decoded.uid})) {
-        const d = await Driver.findOne({_id:decoded.uid});
+      if(Driver.exists({_id: req.data.uid})) {
+        const d = await Driver.findOne({_id: req.data.uid});
         const r = await Availability.find({ driver: d });
         res.json({
           status: "success",
@@ -38,13 +33,6 @@ const create = async (req, res) => {
           message: "Driver not found"
         });
       }
-    } catch (error) {
-      res.json({
-        status: "error",
-        message: "Invalid token",
-      });
-    }
-  
   }
 
   const getById = async (req, res) => {
@@ -61,7 +49,6 @@ const create = async (req, res) => {
         message: "Invalid availability id",
       });
     }
-  
   }
 
   module.exports = {

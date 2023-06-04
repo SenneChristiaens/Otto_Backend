@@ -11,11 +11,11 @@ mongoose.set('strictQuery', false);
 
 mongoose.connect(process.env.DB_CONNECTION);
 
+const driverRouter = require("./routes/driver");
+const availabilityRouter = require("./routes/availability.js");
 const eldercareRouter = require("./routes/eldercare");
 const residentRouter = require("./routes/resident");
-const driverRouter = require("./routes/driver");
 const rideRouter = require("./routes/ride");
-const availabilityRouter = require("./routes/availability");
 
 
 const app = express();
@@ -37,11 +37,11 @@ app.use(
 );
 
 
+app.use("/api/driver", driverRouter);
+app.use("/api/availability", availabilityRouter);
 app.use("/api/eldercare", eldercareRouter);
 app.use("/api/resident", residentRouter);
-app.use("/api/driver", driverRouter);
 app.use("/api/ride", rideRouter);
-app.use("/api/availability", availabilityRouter);
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
