@@ -1,4 +1,4 @@
-const Resident = require("../models/resident");
+const Resident = require("../models/resident.js");
 
 const create = async (req, res) => {
     let resident = new Resident();

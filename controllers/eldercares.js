@@ -2,7 +2,6 @@ const Eldercare = require("../models/eldercare");
 const Resident = require("../models/resident");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const secret = process.env.DB_SECRET;
 
 const create = async (req, res) => {
   let eldercare = new Eldercare();
@@ -27,15 +26,14 @@ const create = async (req, res) => {
   eldercare.password = await bcrypt.hash(eldercare.password, salt);
 
   // save eldercare home to database
-  eldercare.save().then((result) => {
+  eldercare.save().then(result => {
     let token = jwt.sign(
       {
         uid: eldercare._id,
         nickname: eldercare.nickname,
       },
-      secret
+      process.env.TOKEN_SECRET
     );
-
     res.json({
       status: "success",
       data: {
@@ -60,7 +58,7 @@ const login = async (req, res) => {
           uid: eldercare._id,
           email: eldercare.email,
         },
-        secret
+        process.env.TOKEN_SECRET
       );
 
       res.json({
@@ -85,11 +83,8 @@ const login = async (req, res) => {
 
 const isAuth = async (req, res) => {
   try {
-    const decoded = jwt.verify(req.headers.authorization.split(" ")[1], secret);
-    const id = decoded.uid;
-    const email = decoded.email;
-    const e = await Eldercare.findOne({ email: email });
-    if (e._id == id) {
+    const e = await Eldercare.findOne({ email: req.data.email });
+    if (e._id == req.data.uid) {
       res.json({
         status: "success",
         message: "Eldercare is authorized",
@@ -109,10 +104,8 @@ const isAuth = async (req, res) => {
 };
 
 const getResidents = async (req, res) => {
-  try {
-    const decoded = jwt.verify(req.headers.authorization.split(' ')[1], process.env.DB_SECRET);
-    if(Eldercare.exists({_id: decoded.uid})) {
-      const e = await Resident.find({ eldercare: decoded.uid });
+    if(Eldercare.exists({_id: req.data.uid})) {
+      const e = await Resident.find({ eldercare: req.data.uid });
       res.json({
         residents: e
       });
@@ -122,12 +115,6 @@ const getResidents = async (req, res) => {
         message: "Eldercare not found",
       });
     }
-  } catch (error) {
-    res.json({
-      status: "error",
-      message: "Invalid token",
-    });
-  }
 };
 
 module.exports = {

@@ -1,7 +1,6 @@
 const Driver = require("../models/driver");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const secret = process.env.DB_SECRET;
 
 const create = async (req, res) => {
   let driver = new Driver();
@@ -56,7 +55,7 @@ const create = async (req, res) => {
         uid: driver._id,
         name: driver.givenName + " " + driver.familyName,
       },
-      secret
+      process.env.TOKEN_SECRET
     );
     res.json({
       status: "success",
@@ -82,7 +81,7 @@ const login = async (req, res) => {
           uid: driver._id,
           email: driver.email,
         },
-        process.env.DB_SECRET
+        process.env.TOKEN_SECRET
       );
 
       res.json({
@@ -105,12 +104,8 @@ const login = async (req, res) => {
 };
 
 const isAuth = async (req, res) => {
-  try {
-    const decoded = jwt.verify(req.headers.authorization.split(' ')[1], process.env.DB_SECRET);
-    const id = decoded.uid;
-    const email = decoded.email;
-    const d = await Driver.findOne({ email: email });
-    if(d._id == id) {
+    const d = await Driver.findOne({ email: req.data.email });
+    if(d._id == req.data.uid) {
       res.json({
         status: "success",
         message: "Driver is authorized"
@@ -121,19 +116,11 @@ const isAuth = async (req, res) => {
         message: "Driver is not authorized"
       });
     }
-  } catch (error) {
-    res.json({
-      status: "error",
-      message: "Invalid token"
-    });
-  }
 }
 
 const getInfo = async (req, res) => {
-  try {
-    const decoded = jwt.verify(req.headers.authorization.split(' ')[1], process.env.DB_SECRET);
-    if(Driver.exists({_id: decoded.uid})) {
-      const d = await Driver.findOne({ _id: decoded.uid });
+    if(Driver.exists({_id: req.data.uid})) {
+      const d = await Driver.findOne({ _id: req.data.uid });
       res.json({
         status: "success",
         name: d.givenName + " " + d.familyName,
@@ -149,13 +136,6 @@ const getInfo = async (req, res) => {
         message: "Driver not found"
       });
     }
-  } catch (error) {
-    res.json({
-      status: "error",
-      message: "Invalid token"
-    });
-  }
-
 }
 
 module.exports = {
