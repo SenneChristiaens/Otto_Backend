@@ -1,18 +1,15 @@
 const mongoose = require("mongoose");
-const Driver = require("./driver");
-const Resident = require("./resident");
 const Schema = mongoose.Schema;
 
-const rideSchema = new Schema({
-  origin: [Number],
-  destination: [Number],
-  originAdress: String,
-  destinationAdress: String,
-  driver: { type: Object, ref: Driver},
-  residents: [{ type: Object, ref: Resident}],
-  timeStamp: Date
+const residentSchema = new Schema({
+  name: String,
+  dateOfBirth: String,
+  roomNumber: String,
+  emergencyContact: String,
+  needs: [String],
+  eldercare: String,
 });
 
-const Ride = mongoose.model("Ride", rideSchema);
+const Resident = mongoose.model("residents", residentSchema);
 
-module.exports = Ride;
+module.exports = Resident;
