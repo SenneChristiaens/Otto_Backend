@@ -6,10 +6,11 @@ const jwt = require("jsonwebtoken");
 
 const create = async (req, res) => {
     let ride = new Ride();
-    ride.origin = [req.body.origin[0], req.body.origin[1]];
-    ride.originAddress = req.body.originAddress;
-    ride.destination = [req.body.destination[0], req.body.destination[1]];
-    ride.destinationAddress = req.body.destinationAddress;
+    ride.origin = req.body.origin;
+    ride.originAddress = req.body.originaddress;
+    ride.destination = req.body.destination;
+    ride.destinationAddress = req.body.destinationaddress;
+
     ride.driver = null;
     ride.timeStamp = new Date(req.body.timeStamp);
     
