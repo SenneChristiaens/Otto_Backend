@@ -7,7 +7,7 @@ const rideSchema = new Schema({
   origin: [Number],
   destination: [Number],
   originAddress: String,
-  destinationAdress: String,
+  destinationAddress: String,
   driver: { type: Object, ref: Driver},
   residents: [{ type: Object, ref: Resident}],
   timeStamp: Date

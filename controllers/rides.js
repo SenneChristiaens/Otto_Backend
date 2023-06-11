@@ -10,6 +10,7 @@ const create = async (req, res) => {
     ride.originAddress = req.body.originaddress;
     ride.destination = req.body.destination;
     ride.destinationAddress = req.body.destinationaddress;
+
     ride.driver = null;
     ride.timeStamp = new Date(req.body.timeStamp);
     
