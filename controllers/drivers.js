@@ -2,6 +2,40 @@ const Driver = require("../models/driver");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+const changePassword = async (req, res) => {
+  let driver = await Driver.findById(req.data.uid);
+
+  const validatePassword = await bcrypt.compare(
+    req.body.password,
+    driver.password
+    );
+  if (!validatePassword) {
+    return res.json({
+      status: "error",
+      message: "Wrong password",
+    });
+  }
+
+  if (req.body.newPassword == "") {
+    return res.json({
+      status: "error",
+      message: "Password can't be empty",
+    });
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  driver.password = await bcrypt.hash(req.body.newPassword, salt);
+
+  driver.save().then((result) => {
+    res.json({
+      status: "success",
+      data: {
+        msg: "Password changed successfully",
+      },
+    });
+  });
+};
+
 const create = async (req, res) => {
   let driver = new Driver();
   driver.givenName = req.body.givenName;
@@ -142,5 +176,6 @@ module.exports = {
   create,
   login,
   isAuth,
-  getInfo
+  getInfo,
+  changePassword,
 };
