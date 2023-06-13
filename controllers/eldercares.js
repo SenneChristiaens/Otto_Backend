@@ -26,7 +26,7 @@ const create = async (req, res) => {
   eldercare.password = await bcrypt.hash(eldercare.password, salt);
 
   // save eldercare home to database
-  eldercare.save().then(result => {
+  eldercare.save().then((result) => {
     let token = jwt.sign(
       {
         uid: eldercare._id,
@@ -104,17 +104,32 @@ const isAuth = async (req, res) => {
 };
 
 const getResidents = async (req, res) => {
-    if(Eldercare.exists({_id: req.data.uid})) {
-      const e = await Resident.find({ eldercare: req.data.uid });
-      res.json({
-        residents: e
-      });
-    } else {
-      res.json({
-        status: "error",
-        message: "Eldercare not found",
-      });
-    }
+  if (Eldercare.exists({ _id: req.data.uid })) {
+    const e = await Resident.find({ eldercare: req.data.uid });
+    res.json({
+      residents: e,
+    });
+  } else {
+    res.json({
+      status: "error",
+      message: "Resident not found",
+    });
+  }
+};
+
+getResidentsById = async (req, res) => {
+  const id = req.params.id;
+  if (Eldercare.exists({ _id: req.data.uid })) {
+    const e = await Resident.find({ _id: id });
+    res.json({
+      residents: e,
+    });
+  } else {
+    res.json({
+      status: "error",
+      message: "Resident not found",
+    });
+  }
 };
 
 module.exports = {
@@ -122,4 +137,5 @@ module.exports = {
   login,
   isAuth,
   getResidents,
+  getResidentsById,
 };

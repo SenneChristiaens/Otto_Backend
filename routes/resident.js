@@ -5,5 +5,6 @@ const jwt = require('../middleware/jwt.js');
 
 router.post("/create", jwt.authenticateToken, residentController.create);
 router.put("/edit/:id", jwt.authenticateToken, residentController.edit);
+router.get("/getById/:id", jwt.authenticateToken, residentController.getById);
 
 module.exports = router;
