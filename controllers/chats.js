@@ -39,7 +39,7 @@ const addMessage = async (req, res) => {
 
 const getByUser = async (req, res) => {
   await Chat.find()
-    .or([{ driver: req.data.uid }, { eldercare: req.data.uid }])
+    .or([{ driver: await Driver.findOne({ _id: req.data.uid }) }, { eldercare: await Eldercare.findOne({ _id: req.data.uid }) }])
     .then((chats) => {
       res.json({
         status: "success",
