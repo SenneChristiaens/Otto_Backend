@@ -8,5 +8,6 @@ router.post("/getbydriver", jwt.authenticateToken, rideController.getRidesByDriv
 router.post("/getbyid", jwt.authenticateToken, rideController.getById);
 router.post("/getavailablerides", jwt.authenticateToken, rideController.getAvailableRides);
 router.post("/accept", jwt.authenticateToken, rideController.accept);
+router.get("/:id", jwt.authenticateToken, rideController.getById);
 
 module.exports = router;

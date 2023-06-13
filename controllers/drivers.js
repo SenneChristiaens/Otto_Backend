@@ -171,6 +171,19 @@ const getInfo = async (req, res) => {
       });
     }
 }
+const getById = async (req, res) => {
+  if (Driver.exists({ _id: req.params.id })) {
+    const d = await Driver.find({ _id: id });
+    res.json({
+      driver: d,
+    });
+  } else {
+    res.json({
+      status: "error",
+      message: "Driver not found",
+    });
+  }
+};
 
 module.exports = {
   create,
@@ -178,4 +191,5 @@ module.exports = {
   isAuth,
   getInfo,
   changePassword,
+  getById,
 };

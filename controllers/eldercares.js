@@ -117,9 +117,24 @@ const getResidents = async (req, res) => {
   }
 };
 
+const getById = async (req, res) => {
+  if (Eldercare.exists({ _id: req.params.id })) {
+    const e = await Eldercare.find({ _id: id });
+    res.json({
+      eldercare: e,
+    });
+  } else {
+    res.json({
+      status: "error",
+      message: "Eldercare not found",
+    });
+  }
+};
+
 module.exports = {
   create,
   login,
   isAuth,
   getResidents,
+  getById,
 };
