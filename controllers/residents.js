@@ -39,7 +39,23 @@ const edit = async (req, res) => {
   });
 };
 
+const getById = async (req, res) => {
+  const id = req.params.id;
+  if (Eldercare.exists({ _id: req.data.uid })) {
+    const e = await Resident.find({ _id: id });
+    res.json({
+      residents: e,
+    });
+  } else {
+    res.json({
+      status: "error",
+      message: "Resident not found",
+    });
+  }
+};
+
 module.exports = {
   create,
   edit,
+  getById,
 };
