@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const Message = require("./message.js");
 
 const chatSchema = new Schema({
-  messages: [ String ],
+  messages: [ { type: Object, ref: Message } ],
   driver: String,
   eldercare: String,
 });

@@ -16,6 +16,8 @@ const availabilityRouter = require("./routes/availability.js");
 const eldercareRouter = require("./routes/eldercare");
 const residentRouter = require("./routes/resident");
 const rideRouter = require("./routes/ride");
+const chatRouter = require("./routes/chat");
+const messageRouter = require("./routes/message");
 
 
 const app = express();
@@ -42,6 +44,8 @@ app.use("/api/availability", availabilityRouter);
 app.use("/api/eldercare", eldercareRouter);
 app.use("/api/resident", residentRouter);
 app.use("/api/ride", rideRouter);
+app.use("/api/chat", chatRouter);
+app.use("/api/message", messageRouter);
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
