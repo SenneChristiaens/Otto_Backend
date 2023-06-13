@@ -23,7 +23,7 @@ const create = async (req, res) => {
 const edit = async (req, res) => {
   const id = req.params.id;
   if (Resident.exists({ _id: id })) {
-    const r = await Resident.updateOne({ _id: id }, req.body);
+    const r = await Resident.findOneAndUpdate({ _id: id }, req.body);
     res.json({
       status: "success",
       message: "Resident updated successfully",
