@@ -1,10 +1,12 @@
 const Chat = require("../models/chat.js");
+const Driver = require("../models/driver.js");
+const Eldercare = require("../models/eldercare.js");
 const Message = require("../models/message.js");
 
 const create = async (req, res) => {
   let chat = new Chat();
-  chat.driver = req.data.uid;
-  chat.eldercare = req.body.eldercare;
+  chat.driver = await Driver.findOne({ _id: req.data.uid });
+  chat.eldercare = await Eldercare.findOne({ _id: req.body.eldercare });
 
   chat.save().then((result) => {
     res.json({
