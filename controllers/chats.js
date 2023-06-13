@@ -35,7 +35,22 @@ const addMessage = async (req, res) => {
   }
 };
 
+const getByUser = async (req, res) => {
+  await Chat.find()
+    .or([{ driver: req.data.uid }, { eldercare: req.data.uid }])
+    .then((chats) => {
+      res.json({
+        status: "success",
+        chats: chats,
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
 module.exports = {
   create,
   addMessage,
+  getByUser,
 };
