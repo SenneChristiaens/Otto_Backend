@@ -21,22 +21,19 @@ const create = async (req, res) => {
 };
 
 const edit = async (req, res) => {
-  let resident = await Resident.findById(req.params.id);
-  resident.name = req.body.name;
-  resident.dateOfBirth = req.body.dateOfBirth;
-  resident.roomNumber = req.body.roomNumber;
-  resident.emergencyContact = req.body.emergencyContact;
-  resident.needs = req.body.needs;
-  resident.eldercare = req.body.eldercare;
-
-  resident.save().then((result) => {
+  const id = req.params.id;
+  if (Resident.exists({ _id: id })) {
+    const r = await Resident.findOneAndUpdate({ _id: id }, req.body);
     res.json({
       status: "success",
-      data: {
-        msg: "Resident '" + resident.name + "' edited successfully",
-      },
+      message: "Resident updated successfully",
     });
-  });
+  } else {
+    res.json({
+      status: "error",
+      message: "Resident not found",
+    });
+  }
 };
 
 const getById = async (req, res) => {
