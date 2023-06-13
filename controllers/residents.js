@@ -54,8 +54,25 @@ const getById = async (req, res) => {
   }
 };
 
+const deleteById = async (req, res) => {
+  const id = req.params.id;
+  if (Resident.exists({ _id: id })) {
+    const r = await Resident.deleteOne({ _id: id });
+    res.json({
+      status: "success",
+      message: "Resident deleted successfully",
+    });
+  } else {
+    res.json({
+      status: "error",
+      message: "Resident not found",
+    });
+  }
+};
+
 module.exports = {
   create,
   edit,
   getById,
+  deleteById,
 };
