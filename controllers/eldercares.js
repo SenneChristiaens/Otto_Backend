@@ -119,7 +119,7 @@ const getResidents = async (req, res) => {
 
 const getById = async (req, res) => {
   if (Eldercare.exists({ _id: req.params.id })) {
-    const e = await Eldercare.find({ _id: id });
+    const e = await Eldercare.find({ _id: req.params.id });
     res.json({
       eldercare: e,
     });
