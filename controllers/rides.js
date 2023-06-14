@@ -35,7 +35,7 @@ const create = async (req, res) => {
   const getRidesByEldercare = async (req, res) => {
     try {
       if(Eldercare.exists({_id: req.data.uid})) {
-        let r = await Ride.find({ eldercare: await Eldercare.findOne({_id: req.data.uid}) });
+        let r = await Ride.find({ eldercare: Eldercare.findOne({ _id: req.data.uid }) });
         res.json({
           status: "success",
           rides: r,
