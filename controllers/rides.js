@@ -1,6 +1,7 @@
 const Ride = require("../models/ride.js");
 const Driver = require("../models/driver.js");
 const Resident = require("../models/resident.js");
+const Eldercare = require("../models/eldercare.js");
 
 const jwt = require("jsonwebtoken");
 
@@ -30,10 +31,33 @@ const create = async (req, res) => {
     });
   };
 
+  const getRidesByEldercare = async (req, res) => {
+    try {
+      if(Eldercare.exists({_id: req.data.uid})) {
+        const r = await Ride.find({ eldercare: await Eldercare.findOne({_id: req.data.uid}) });
+        res.json({
+          status: "success",
+          rides: r,
+        });
+      } else {
+        res.json({
+          status: "error",
+          message: "Eldercare not found"
+        });
+      }
+    } catch (error) {
+      res.json({
+        status: "error",
+        message: "Invalid token",
+      });
+    }
+  };
+    
+      
+
   const getRidesByDriver = async (req, res) => {
     try {
       if(Driver.exists({_id: req.data.uid})) {
-        // const d = await Driver.findOne({_id: req.data.uid});
         const r = await Ride.find({ driver: await Driver.findOne({_id: req.data.uid}) });
         res.json({
           status: "success",
@@ -102,5 +126,6 @@ const create = async (req, res) => {
     getById,
     getAvailableRides,
     accept,
+    getRidesByEldercare
   };
   
