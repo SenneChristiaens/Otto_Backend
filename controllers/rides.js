@@ -32,27 +32,21 @@ const create = async (req, res) => {
     });
   };
 
-  const getRidesByEldercare = async (req, res) => {
-    try {
-      if(Eldercare.exists({ _id: req.body.id })) {
-        let r = await Ride.find({ eldercare: Eldercare.findOne({ _id: req.body.id }) });
-        res.json({
-          status: "success",
-          rides: r,
-        });
-      } else {
-        res.json({
-          status: "error",
-          message: "Eldercare not found"
-        });
-      }
-    } catch (error) {
-      res.json({
-        status: "error",
-        message: "Invalid token",
-      });
-    }
-  };
+const getRidesByEldercare = async (req, res) => {
+  console.log('test');
+  if(Eldercare.findById(req.data.uid)) {
+    let r = await Ride.find({ eldercare: await Eldercare.findById(req.data.uid) });
+    res.json({
+      status: "success",
+      rides: r,
+    });
+  } else {
+    res.json({
+      status: "error",
+      message: "Eldercare not found"
+    });
+  }
+};
     
       
 
@@ -128,6 +122,6 @@ const create = async (req, res) => {
     getById,
     getAvailableRides,
     accept,
-    getRidesByEldercare
+    getRidesByEldercare,
   };
   
