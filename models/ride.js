@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Driver = require("./driver");
 const Resident = require("./resident");
+const Eldercare = require("./eldercare");
 const Schema = mongoose.Schema;
 
 const rideSchema = new Schema({
@@ -10,6 +11,7 @@ const rideSchema = new Schema({
   destinationAddress: String,
   driver: { type: Object, ref: Driver},
   residents: [{ type: Object, ref: Resident}],
+  eldercare: { type: Object, ref: Eldercare},
   timeStamp: Date
 });
 
