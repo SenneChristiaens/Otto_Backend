@@ -15,11 +15,10 @@ const create = async (req, res) => {
     ride.timeStamp = new Date(req.body.timeStamp);
     
     //get all residents from id and push to array
-    let residents = [];
     for (let i = 0; i < req.body.residents.length; i++) {
     ride.residents.push(await Resident.findOne({ _id: req.body.residents[i] }));
     }
-    ride.eldercare = await Eldercare.findOne ({ _id: ride.residents[0].eldercare});
+    // ride.eldercare = await Eldercare.findOne ({ _id: ride.residents[0].eldercare});
     // save eldercare home to database
     ride.save().then(result => {
       res.json({
