@@ -8,14 +8,23 @@ const create = async (req, res) => {
   chat.driver = await Driver.findOne({ _id: req.data.uid });
   chat.eldercare = await Eldercare.findOne({ _id: req.body.eldercare });
 
-  chat.save().then((result) => {
+  if (await Chat.exists({ driver: req.data.uid, eldercare: req.body.eldercare })) {
     res.json({
-      status: "success",
+      status: "error",
       data: {
-        msg: "Chat created successfully",
+        msg: "There already is a chat with these users",
       },
     });
-  });
+  } else {
+    chat.save().then((result) => {
+      res.json({
+        status: "success",
+        data: {
+          msg: "Chat created successfully",
+        },
+      });
+    });
+  }
 };
 
 const addMessage = async (req, res) => {
