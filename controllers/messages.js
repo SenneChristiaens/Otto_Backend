@@ -11,6 +11,7 @@ const create = async (req, res) => {
       status: "success",
       data: {
         msg: "Message created successfully",
+        id: result._id,
       },
     });
   });
