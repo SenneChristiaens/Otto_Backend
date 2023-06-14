@@ -7,6 +7,5 @@ router.post("/create", driverController.create);
 router.post("/login", driverController.login);
 router.post("/auth", jwt.authenticateToken, driverController.isAuth);
 router.post("/info", jwt.authenticateToken, driverController.getInfo);
-router.put("/changepassword", jwt.authenticateToken, driverController.changePassword);
 
 module.exports = router;

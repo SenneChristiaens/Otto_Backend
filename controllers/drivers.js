@@ -156,6 +156,5 @@ module.exports = {
   login,
   isAuth,
   getInfo,
-  changePassword,
   getById,
 };
