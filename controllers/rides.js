@@ -33,7 +33,6 @@ const create = async (req, res) => {
   };
 
 const getRidesByEldercare = async (req, res) => {
-  console.log('test');
   if(Eldercare.findById(req.data.uid)) {
     let r = await Ride.find({ eldercare: await Eldercare.findById(req.data.uid) });
     res.json({
