@@ -93,7 +93,8 @@ const create = async (req, res) => {
         const r = await Ride.findOneAndUpdate({ _id: req.body.id },{ driver: await Driver.findOne({ _id: req.data.uid }) });
         res.json({
           status: "success",
-          message: "Ride accepted"
+          message: "Ride accepted",
+          ride: r,
         });
       } else {
         res.json({
