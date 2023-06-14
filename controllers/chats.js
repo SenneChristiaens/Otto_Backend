@@ -8,7 +8,7 @@ const create = async (req, res) => {
   chat.driver = await Driver.findOne({ _id: req.data.uid });
   chat.eldercare = await Eldercare.findOne({ _id: req.body.eldercare });
 
-  if (await Chat.exists({ driver: req.data.uid, eldercare: req.body.eldercare })) {
+  if (await Chat.exists({ driver: chat.driver, eldercare: chat.eldercare })) {
     res.json({
       status: "error",
       data: {
