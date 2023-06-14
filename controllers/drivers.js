@@ -2,51 +2,6 @@ const Driver = require("../models/driver");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-// change password fuction for driver
-const changePassword = async (req, res) => {
-  const driver = await Driver.findOne({ email: req.data.email });
-  if (driver) {
-    if (req.body.oldPassword && driver.password) {
-      const validatePassword = await bcrypt.compare(
-        req.body.oldPassword,
-        driver.password
-      );
-
-      if (validatePassword) {
-        //generate salt to hash password
-        const salt = await bcrypt.genSalt(10);
-
-        //set user password to hashed password
-        driver.password = await bcrypt.hash(req.body.newPassword, salt);
-
-        // save user to database
-        driver.save().then((result) => {
-          res.json({
-            status: "success",
-            message: "Password changed",
-          });
-        });
-      } else {
-        res.json({
-          status: "error",
-          message: "Old password is not correct",
-        });
-      }
-    } else {
-      res.json({
-        status: "error",
-        message: "Missing old password or driver password",
-      });
-    }
-  } else {
-    res.json({
-      status: "error",
-      message: "User not found",
-    });
-  }
-}
-
-
 const create = async (req, res) => {
   let driver = new Driver();
   driver.givenName = req.body.givenName;
