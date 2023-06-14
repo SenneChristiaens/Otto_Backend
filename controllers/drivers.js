@@ -2,39 +2,50 @@ const Driver = require("../models/driver");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+// change password fuction for driver
 const changePassword = async (req, res) => {
-  let driver = await Driver.findById(req.data.uid);
+  const driver = await Driver.findOne({ email: req.data.email });
+  if (driver) {
+    if (req.body.oldPassword && driver.password) {
+      const validatePassword = await bcrypt.compare(
+        req.body.oldPassword,
+        driver.password
+      );
 
-  const validatePassword = await bcrypt.compare(
-    req.body.password,
-    driver.password
-    );
-  if (!validatePassword) {
-    return res.json({
-      status: "error",
-      message: "Wrong password",
-    });
-  }
+      if (validatePassword) {
+        //generate salt to hash password
+        const salt = await bcrypt.genSalt(10);
 
-  if (req.body.newPassword == "") {
-    return res.json({
-      status: "error",
-      message: "Password can't be empty",
-    });
-  }
+        //set user password to hashed password
+        driver.password = await bcrypt.hash(req.body.newPassword, salt);
 
-  const salt = await bcrypt.genSalt(10);
-  driver.password = await bcrypt.hash(req.body.newPassword, salt);
-
-  driver.save().then((result) => {
+        // save user to database
+        driver.save().then((result) => {
+          res.json({
+            status: "success",
+            message: "Password changed",
+          });
+        });
+      } else {
+        res.json({
+          status: "error",
+          message: "Old password is not correct",
+        });
+      }
+    } else {
+      res.json({
+        status: "error",
+        message: "Missing old password or driver password",
+      });
+    }
+  } else {
     res.json({
-      status: "success",
-      data: {
-        msg: "Password changed successfully",
-      },
+      status: "error",
+      message: "User not found",
     });
-  });
-};
+  }
+}
+
 
 const create = async (req, res) => {
   let driver = new Driver();
@@ -72,7 +83,7 @@ const create = async (req, res) => {
   if ((Date.now() - birthDate) / 31556952000 < 18) {
     return res.json({
       status: "error",
-      message: "User must me 18years or over",
+      message: "User must me 18 years or over",
     });
   }
 
